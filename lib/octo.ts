@@ -72,6 +72,7 @@ export const getRepoContents = async (owner: string, repo: string): Promise<Data
     });
 
     const files = tree.filter((item) => item.type === "blob").filter((item) => item.path && isTextFile(item.path));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const structure = files.reduce((acc: Record<string, any>, item) => {
       const path = item.path?.split("/") || [];
       let current = acc;
@@ -132,6 +133,7 @@ export const getFile = async (owner: string, repo: string, file_sha: string) => 
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getFileTree = (structure: Record<string, any>, indent: number = 0): string => {
   let result = "";
   const entries = Object.entries(structure);
@@ -150,4 +152,15 @@ export const getFileTree = (structure: Record<string, any>, indent: number = 0):
   });
 
   return result;
+};
+
+export const repoExists = async (owner: string, repo: string) => {
+  const { status } = await octokit.rest.repos.get({
+    owner,
+    repo,
+  });
+  if (status === 200) {
+    return true;
+  }
+  return false;
 };
