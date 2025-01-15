@@ -1,5 +1,4 @@
 "use client";
-import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,8 +51,7 @@ export default function Home() {
   if (!data) {
     return (
       <div className="text-violet-500">
-        <div className="min-h-[90vh] flex flex-col lg:gap-4">
-          <Navbar />
+        <div className="min-h-[85vh] flex flex-col lg:gap-4">
           <div className="flex-col items-center gap-4 lg:flex hidden mt-20">
             <h1 className="text-5xl font-semibold text-center mt-12 mb-8 lg:-mb-2   animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent text-wrap">
               Prompty-Firendly Codebase
@@ -62,7 +60,7 @@ export default function Home() {
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium possimus necessitatibus obcaecati accusamus?
             </p>
           </div>
-          <div className="min-h-[30vh] lg:m-8 flex justify-center">
+          <div className="min-h-[24vh] lg:m-8 flex justify-center">
             <div className="lg:bg-white lg:border-[.5px] lg:rounded-lg xl:w-6/12 w-full p-6">
               <div className="flex-col items-center gap-4 lg:hidden flex">
                 <h1 className="text-4xl font-semibold text-center mt-6 mb-4 lg:hidden block animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent">
