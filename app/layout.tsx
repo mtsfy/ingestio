@@ -3,6 +3,7 @@ import { Urbanist } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import ToasterProvider from "@/providers/toast-provider";
 
 const font = Urbanist({
   subsets: ["latin"],
@@ -21,7 +22,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${font.className} antialiased`}>
-        <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
+        <ToasterProvider />
+        <div className="absolute inset-0 -z-10 w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
           <Navbar />
           {children}
           <Footer />
