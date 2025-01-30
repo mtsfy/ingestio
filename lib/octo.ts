@@ -93,7 +93,6 @@ export const getRepoContents = async (owner: string, repo: string): Promise<Data
       return acc;
     }, {});
 
-    // await fs.writeFile(`${owner}-${repo}.txt`, "");
     let allData = "";
 
     for (const file of files) {
@@ -101,13 +100,14 @@ export const getRepoContents = async (owner: string, repo: string): Promise<Data
       const content = await getFile(owner, repo, file.sha!);
       const newData = `\n${"=".repeat(50)}\nFile: ${file.path}\n${"=".repeat(50)}\n${content}\n${"=".repeat(50)}\n`;
       allData += newData;
-      //   await fs.appendFile(`${owner}-${repo}.txt`, newData);
     }
     const fileTree = getFileTree(structure);
     return {
       content: allData,
       directory: fileTree,
       summary: "",
+      repo: repo,
+      owner: owner,
     };
   } catch (error) {
     console.log("Error extracting repo contents:", error);

@@ -69,7 +69,7 @@ export default function Home() {
     return <div>loading...</div>;
   }
   return (
-    <div className="text-violet-500 min-h-screen">
+    <div className="text-violet-500 min-h-screen pb-32">
       <div className="min-h-[85vh] flex flex-col lg:gap-4">
         <div className="flex-col items-center gap-4 lg:flex hidden mt-20">
           <h1 className="text-5xl font-semibold text-center mt-12 mb-8 lg:-mb-2   animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent text-wrap">
@@ -127,8 +127,7 @@ export default function Home() {
         </div>
         {data && (
           <div className="min-h-[50vh]">
-            {/* <Result data={{ directory: "hello", content: "hello", summary: "summary" }} /> */}
-            <Result data={data!} />
+            <Result data={data} />
           </div>
         )}
       </div>
