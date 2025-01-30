@@ -144,7 +144,7 @@ export const getFileTree = (structure: Record<string, any>, indent: number = 0):
     const pipes = "│   ".repeat(indent);
 
     if (value.type === "file") {
-      result += `${pipes}${prefix}${key} (${value.size} bytes)\n`;
+      result += `${pipes}${prefix}${key}\n`;
     } else {
       result += `${pipes}${prefix}${key}/\n`;
       result += getFileTree(value, indent + 1);
@@ -155,12 +155,17 @@ export const getFileTree = (structure: Record<string, any>, indent: number = 0):
 };
 
 export const repoExists = async (owner: string, repo: string) => {
-  const { status } = await octokit.rest.repos.get({
-    owner,
-    repo,
-  });
-  if (status === 200) {
-    return true;
+  try {
+    const { status } = await octokit.rest.repos.get({
+      owner,
+      repo,
+    });
+    if (status === 200) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log("repository not found (maybe private?)", error);
+    return false;
   }
-  return false;
 };

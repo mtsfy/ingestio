@@ -7,6 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import { getRepoContents, repoExists } from "@/lib/octo";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import PulseLoader from "react-spinners/PulseLoader";
 
 const SIZE_OPTIONS = [
   1_000, 2_000, 3_000, 4_000, 5_000, 10_000, 20_000, 30_000, 40_000, 50_000, 100_000, 200_000, 300_000, 400000, 500_000, 1_000_000, 2_000_000,
@@ -29,25 +30,36 @@ export default function Home() {
 
   const handleSubmit = async () => {
     try {
+      setUrl("");
+      setError("");
       setIsLoading(true);
-      const temp = url.split("/").slice(-2);
-      const owner = temp[0];
-      const repo = temp[1];
+      const regex = /^(https?:\/\/)?(www\.)?github\.com\/([^\/]+)\/([^\/]+)\/?$/;
+      const match = url.match(regex);
 
-      console.log(owner, repo);
-
-      if (!owner && !repo) {
-        setError("Error: Repository not found, make sure it is public.");
-        toast.error("Something went wrong. Please try again");
+      if (!match) {
+        setError(`Invalid GitHub URL format. Please use: github.com/username/repository`);
+        toast.error("Invalid URL format");
         return;
       }
+
+      const owner = match[3];
+      const repo = match[4];
+
+      console.log(match);
+      console.log(owner, repo);
 
       const exists = await repoExists(owner, repo);
       if (!exists) {
         setError("Error: Repository not found, make sure it is public.");
         return;
       }
-      setData(null);
+
+      const response = await getRepoContents(owner, repo);
+      if (!response) {
+        setError("Error: Something went wrong fetch repository.");
+        return;
+      }
+      setData(response);
     } catch (error) {
       console.log("error fetching:", error);
     } finally {
@@ -65,9 +77,6 @@ export default function Home() {
     fetch();
   }, []);
 
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
   return (
     <div className="text-violet-500 min-h-screen pb-32">
       <div className="min-h-[85vh] flex flex-col lg:gap-4">
@@ -90,7 +99,7 @@ export default function Home() {
               </p>
             </div>
             {error && (
-              <div className="bg-red-200 text-red-400 border-red-400 border-[1px] p-4 rounded-3xl my-6">
+              <div className="bg-red-100 text-red-400 border-red-400 border-[1px] p-4 rounded-3xl my-6 md:text-sm text-[11.5px]">
                 <h3 className="font-medium">{error}</h3>
               </div>
             )}
@@ -102,11 +111,12 @@ export default function Home() {
                 <Input
                   id="repository"
                   onChange={(e) => setUrl(e.target.value)}
+                  autoComplete="off"
                   placeholder="https://github.com/{username}/{repository}"
-                  className="lg:text-normal bg-white placeholder:text-xs placeholder:text-neutral-400"
+                  className="lg:text-normal bg-white placeholder:text-xs placeholder:text-neutral-400 text-neutral-800"
                 />
                 <Button className="bg-violet-500 hover:bg-violet-500/80" onClick={handleSubmit}>
-                  Ingest
+                  {isLoading ? <PulseLoader size={5} color="#ffff" /> : <span>Ingest</span>}
                 </Button>
               </div>
               <div className="flex flex-col gap-4 lg:mt-4 mt-8">

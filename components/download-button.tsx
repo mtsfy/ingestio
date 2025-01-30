@@ -15,7 +15,7 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ data, label, repo, owne
   const handleDownload = (data: string) => {
     const blob = new Blob([data]);
     const url = window.URL.createObjectURL(blob);
-    let linkElement = document.createElement("a");
+    const linkElement = document.createElement("a");
     linkElement.href = url;
     linkElement.download = `${owner}-${repo}-${label}`;
     linkElement.click();
