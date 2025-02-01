@@ -4,4 +4,6 @@ interface Data {
   directory: string;
   repo: string;
   owner: string;
+  tokens: number;
+  files: number;
 }

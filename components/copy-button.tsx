@@ -16,8 +16,8 @@ const CopyButton: React.FC<CopyButtonProps> = ({ data, label }) => {
   };
 
   return (
-    <Button onClick={() => handleCopy(data)} variant={"default"} className="bg-violet-500 hover:bg-violet-500/80">
-      Copy <ClipboardCopy />
+    <Button onClick={() => handleCopy(data)} variant="default" className="bg-violet-500 hover:bg-violet-500/80">
+      <ClipboardCopy />
     </Button>
   );
 };

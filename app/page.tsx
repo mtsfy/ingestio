@@ -17,8 +17,8 @@ const SIZE_OPTIONS = [
 const EXAMPLES = [
   { name: "Ingestio", href: "https://github.com/mtsfy/ingestio" },
   { name: "LinkSelf", href: "https://github.com/mtsfy/linkself" },
-  { name: "Flask", href: "https://github.com/pallets/flask" },
-  { name: "Numpy", href: "https://github.com/numpy/numpy" },
+  { name: "ESP32 Webserver", href: "https://github.com/mtsfy/esp32cam-webserver" },
+  { name: "MPL Scraper", href: "https://github.com/mtsfy/mpl-scraper" },
 ];
 
 export default function Home() {

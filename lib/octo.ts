@@ -1,10 +1,13 @@
 import { Octokit } from "@octokit/rest";
+import { getEncoding } from "js-tiktoken";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_API_TOKEN,
   userAgent: "gitrewind v1.0.0",
   baseUrl: "https://api.github.com",
 });
+
+const enc = getEncoding("cl100k_base");
 
 const BINARY_EXTENSIONS = [
   ".exe",
@@ -70,7 +73,7 @@ export const getRepoContents = async (owner: string, repo: string, size: number)
       tree_sha: "main",
       recursive: "true",
     });
-
+    let tokens = 0;
     const files = tree.filter((item) => item.type === "blob").filter((item) => item.path && isTextFile(item.path) && item.size! <= size);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -97,18 +100,24 @@ export const getRepoContents = async (owner: string, repo: string, size: number)
     let allData = "";
 
     for (const file of files) {
-      if (file.path?.includes("package-lock.json") || file.size! > 50000) continue;
+      if (file.path?.includes("package-lock.json")) continue;
       const content = await getFile(owner, repo, file.sha!);
       const newData = `\n${"=".repeat(50)}\nFile: ${file.path}\n${"=".repeat(50)}\n${content}\n${"=".repeat(50)}\n`;
       allData += newData;
     }
     const fileTree = getFileTree(structure);
+
+    tokens += await getTokens(allData);
+    tokens += await getTokens(fileTree);
+
     return {
       content: allData,
       directory: fileTree,
       summary: "",
       repo: repo,
       owner: owner,
+      tokens,
+      files: files.length,
     };
   } catch (error) {
     console.log("Error extracting repo contents:", error);
@@ -169,4 +178,10 @@ export const repoExists = async (owner: string, repo: string) => {
     console.log("repository not found (maybe private?)", error);
     return false;
   }
+};
+
+export const getTokens = async (data: string) => {
+  const tokens = enc.encode(data);
+
+  return tokens.length;
 };

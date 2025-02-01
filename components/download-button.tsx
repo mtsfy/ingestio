@@ -25,8 +25,8 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({ data, label, repo, owne
   };
 
   return (
-    <Button onClick={() => handleDownload(data)} variant={"default"} className="bg-violet-500 hover:bg-violet-500/80">
-      Download <Download />
+    <Button onClick={() => handleDownload(data)} variant="default" className="bg-violet-500 hover:bg-violet-500/80">
+      <Download />
     </Button>
   );
 };
