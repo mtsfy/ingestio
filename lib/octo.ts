@@ -60,7 +60,7 @@ const isTextFile = (path: string): boolean => {
   return !BINARY_EXTENSIONS.includes(ext);
 };
 
-export const getRepoContents = async (owner: string, repo: string): Promise<Data | null> => {
+export const getRepoContents = async (owner: string, repo: string, size: number): Promise<Data | null> => {
   try {
     const {
       data: { tree },
@@ -71,7 +71,8 @@ export const getRepoContents = async (owner: string, repo: string): Promise<Data
       recursive: "true",
     });
 
-    const files = tree.filter((item) => item.type === "blob").filter((item) => item.path && isTextFile(item.path));
+    const files = tree.filter((item) => item.type === "blob").filter((item) => item.path && isTextFile(item.path) && item.size! <= size);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const structure = files.reduce((acc: Record<string, any>, item) => {
       const path = item.path?.split("/") || [];

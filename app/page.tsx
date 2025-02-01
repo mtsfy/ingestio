@@ -5,13 +5,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { getRepoContents, repoExists } from "@/lib/octo";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import PulseLoader from "react-spinners/PulseLoader";
 
 const SIZE_OPTIONS = [
   1_000, 2_000, 3_000, 4_000, 5_000, 10_000, 20_000, 30_000, 40_000, 50_000, 100_000, 200_000, 300_000, 400000, 500_000, 1_000_000, 2_000_000,
   3_000_000, 4_000_000, 5_000_000, 10_000_000, 20_000_000, 30_000_000, 40_000_000, 50_000_000, 100_000_000,
+];
+
+const EXAMPLES = [
+  { name: "Ingestio", href: "https://github.com/mtsfy/ingestio" },
+  { name: "LinkSelf", href: "https://github.com/mtsfy/linkself" },
+  { name: "Flask", href: "https://github.com/pallets/flask" },
+  { name: "Numpy", href: "https://github.com/numpy/numpy" },
 ];
 
 export default function Home() {
@@ -30,6 +37,8 @@ export default function Home() {
 
   const handleSubmit = async () => {
     try {
+      console.log(size);
+
       setUrl("");
       setError("");
       setIsLoading(true);
@@ -54,7 +63,7 @@ export default function Home() {
         return;
       }
 
-      const response = await getRepoContents(owner, repo);
+      const response = await getRepoContents(owner, repo, size);
       if (!response) {
         setError("Error: Something went wrong fetch repository.");
         return;
@@ -67,43 +76,32 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      const res = await getRepoContents("mtsfy", "bigdata");
-      if (!res) return;
-      setData(res);
-    };
-
-    fetch();
-  }, []);
-
   return (
     <div className="text-violet-500 min-h-screen pb-32">
       <div className="min-h-[85vh] flex flex-col lg:gap-4">
         <div className="flex-col items-center gap-4 lg:flex hidden mt-20">
-          <h1 className="text-5xl font-semibold text-center mt-12 mb-8 lg:-mb-2   animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent text-wrap">
-            Prompty-Firendly Codebase
-          </h1>
-          <p className="w-1/3 text-base text-center mt-4 text-neutral-400 font-medium">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium possimus necessitatibus obcaecati accusamus?
+          <h1 className="text-5xl font-semibold text-center mt-12 mb-8 lg:-mb-2">Prompty-Firendly Codebase</h1>
+          <p className="w-5/12 text- text-center mt-4 text-neutral-500 font-">
+            Ingestio is a tool that converts GitHub repositories into prompt-friendly text digests, facilitating their integration with large language
+            models (LLMs).
           </p>
         </div>
         <div className="min-h-[24vh] lg:m-8 flex justify-center">
           <div className="lg:bg-white lg:border-[.5px] lg:rounded-lg xl:w-6/12 w-full p-6">
             <div className="flex-col items-center gap-4 lg:hidden flex">
-              <h1 className="text-4xl font-semibold text-center mt-6 mb-4 lg:hidden block animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent">
-                Prompty-Firendly Codebase
-              </h1>
-              <p className="text-center mt-4 text-neutral-400">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium possimus necessitatibus obcaecati accusamus?
+              {/* animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent */}
+              <h1 className="text-4xl font-semibold text-center mt-6 mb-4 lg:hidden block">Prompty-Firendly Codebase</h1>
+              <p className="text-center mt-4 text-neutral-500">
+                Ingestio is a tool that converts GitHub repositories into prompt-friendly text digests, facilitating their integration with large
+                language models (LLMs).
               </p>
             </div>
             {error && (
-              <div className="bg-red-100 text-red-400 border-red-400 border-[1px] p-4 rounded-3xl my-6 md:text-sm text-[11.5px]">
-                <h3 className="font-medium">{error}</h3>
+              <div className="bg-red-100 text-red-400 border-red-400 border-[1px] p-4 rounded-3xl my-6 md:text-sm text-[12.5px]">
+                <p className="font-medium w-1/2 lg:w-full">{error}</p>
               </div>
             )}
-            <div className="flex flex-col gap-4 lg:mt-4 mt-8">
+            <div className="flex flex-col gap-4 xl:mt-4 mt-8">
               <Label htmlFor="repository" className="font-medium">
                 Repository:
               </Label>
@@ -111,11 +109,13 @@ export default function Home() {
                 <Input
                   id="repository"
                   onChange={(e) => setUrl(e.target.value)}
+                  value={url}
                   autoComplete="off"
+                  disabled={isLoading}
                   placeholder="https://github.com/{username}/{repository}"
-                  className="lg:text-normal bg-white placeholder:text-xs placeholder:text-neutral-400 text-neutral-800"
+                  className="lg:text-normal text-xs lg:text-sm bg-white placeholder:text-xs placeholder:text-neutral-400 text-neutral-700"
                 />
-                <Button className="bg-violet-500 hover:bg-violet-500/80" onClick={handleSubmit}>
+                <Button className="bg-violet-500 hover:bg-violet-500/80" onClick={handleSubmit} disabled={isLoading}>
                   {isLoading ? <PulseLoader size={5} color="#ffff" /> : <span>Ingest</span>}
                 </Button>
               </div>
@@ -130,7 +130,24 @@ export default function Home() {
                   value={[sizeIndex]}
                   onValueChange={handleSliderChange}
                   className="md:w-1/2 bg-neutral-200"
+                  disabled={isLoading}
                 />
+                <div className="flex flex-col gap-3 mt-4">
+                  <h4 className="font-medium text-sm">Try these example repositories:</h4>
+                  <div className="flex gap-2">
+                    {EXAMPLES.map((item, idx) => (
+                      <Button
+                        variant={"outline"}
+                        key={idx}
+                        onClick={() => setUrl(item.href)}
+                        className="bg-violet-200 border-violet-500 hover:text-violet-500 text-xs lg:text-sm"
+                        disabled={isLoading}
+                      >
+                        {item.name}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
