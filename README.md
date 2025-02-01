@@ -6,7 +6,7 @@ Ingestio is a tool that converts GitHub repositories into prompt-friendly text d
 
 ## :gear: Tech Stack
 
-- [Next.js 13](https://nextjs.org/)
+- [Next.js 15](https://nextjs.org/)
 - [GitHub API (Octokit)](https://github.com/octokit)
 - [Tailwind CSS](https://tailwindcss.com/)
 
@@ -27,7 +27,7 @@ Ingestio is a tool that converts GitHub repositories into prompt-friendly text d
 $ git clone git@github.com:mtsfy/ingestio.git
 ```
 
-### Frontend
+### Setup
 
 ```sh
 $ cd ingestio
