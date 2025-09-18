@@ -77,70 +77,91 @@ export default function Home() {
   };
 
   return (
-    <div className="text-violet-500 min-h-screen pb-32">
-      <div className="min-h-[85vh] flex flex-col lg:gap-4">
-        <div className="flex-col items-center gap-4 lg:flex hidden mt-20">
-          <h1 className="text-5xl font-semibold text-center mt-12 mb-8 lg:-mb-2">Prompty-Firendly Codebase</h1>
-          <p className="w-5/12 text- text-center mt-4 text-neutral-500 font-">
+    <div className="text-violet-500 min-h-screen pb-20 pt-12">
+      <div className="min-h-[85vh] flex flex-col">
+        {/* Desktop Header */}
+        <div className="flex-col items-center lg:flex hidden my-16">
+          <h1 className="text-5xl font-semibold text-center tracking-tight">Prompt-Friendly Codebase</h1>
+          <p className="max-w-2xl text-center mt-6 text-neutral-600">
             Ingestio is a tool that converts GitHub repositories into prompt-friendly text digests, facilitating their integration with large language
             models (LLMs).
           </p>
         </div>
-        <div className="min-h-[24vh] lg:m-8 flex justify-center">
-          <div className="lg:bg-white lg:border-[.5px] lg:rounded-lg xl:w-6/12 w-full p-6">
+
+        {/* Input Container */}
+        <div className="min-h-[24vh] flex justify-center px-4 sm:px-0">
+          <div className="bg-white shadow-sm rounded-xl xl:w-6/12 w-full p-6 sm:p-8 border border-neutral-100">
+            {/* Mobile Header */}
             <div className="flex-col items-center gap-4 lg:hidden flex">
-              {/* animate-text-gradient bg-gradient-to-r from-[#b2a8fd] via-[#8678f9] to-[#c7d2fe] bg-[200%_auto] bg-clip-text text-transparent */}
-              <h1 className="text-4xl font-semibold text-center mt-6 mb-4 lg:hidden block">Prompty-Firendly Codebase</h1>
-              <p className="text-center mt-4 text-neutral-500">
-                Ingestio is a tool that converts GitHub repositories into prompt-friendly text digests, facilitating their integration with large
-                language models (LLMs).
+              <h1 className="text-4xl font-semibold text-center mt-2 mb-4">Prompt-Friendly Codebase</h1>
+              <p className="text-center mt-2 mb-2 text-neutral-600">
+                Ingestio converts GitHub repositories into prompt-friendly text digests for LLMs.
               </p>
             </div>
+
+            {/* Error Message */}
             {error && (
-              <div className="bg-red-100 text-red-400 border-red-400 border-[1px] p-4 rounded-3xl my-6 md:text-sm text-[12.5px]">
-                <p className="font-medium w-1/2 lg:w-full">{error}</p>
+              <div className="bg-red-50 text-red-500 border-red-200 border p-4 rounded-lg my-6 md:text-sm text-sm">
+                <p className="font-medium">{error}</p>
               </div>
             )}
-            <div className="flex flex-col gap-4 xl:mt-4 mt-8">
+
+            {/* Main Input Form */}
+            <div className="flex flex-col gap-4 xl:mt-6 mt-6">
               <Label htmlFor="repository" className="font-medium">
-                Repository:
+                Repository URL
               </Label>
-              <div className="flex items-center gap-4">
+
+              {/* URL Input & Submit Button */}
+              <div className="flex flex-col sm:flex-row items-center gap-3">
                 <Input
                   id="repository"
                   onChange={(e) => setUrl(e.target.value)}
                   value={url}
                   autoComplete="off"
                   disabled={isLoading}
-                  placeholder="https://github.com/{username}/{repository}"
-                  className="lg:text-normal text-xs lg:text-sm bg-white placeholder:text-xs placeholder:text-neutral-400 text-neutral-700"
+                  placeholder="github.com/username/repository"
+                  className="lg:text-normal text-sm bg-white placeholder:text-neutral-400 text-neutral-700 focus-visible:ring-violet-500 w-full"
                 />
-                <Button className="bg-violet-500 hover:bg-violet-500/80" onClick={handleSubmit} disabled={isLoading}>
-                  {isLoading ? <PulseLoader size={5} color="#ffff" /> : <span>Ingest</span>}
+                <Button
+                  className="bg-violet-500 hover:bg-violet-600 transition-colors px-6 py-2 rounded-md w-full sm:w-auto mt-3 sm:mt-0"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                >
+                  {isLoading ? <PulseLoader size={5} color="#ffffff" /> : <span>Ingest</span>}
                 </Button>
               </div>
-              <div className="flex flex-col gap-4 lg:mt-4 mt-8">
-                <Label htmlFor="size" className="font-medium">
-                  Include Files Under: {(size >= 1000000 ? size / 1000000 : size / 1000).toFixed(1)} {size >= 1000000 ? "MB" : "KB"}
-                </Label>
-                <Slider
-                  min={0}
-                  max={SIZE_OPTIONS.length - 1}
-                  step={1}
-                  value={[sizeIndex]}
-                  onValueChange={handleSliderChange}
-                  className="md:w-1/2 bg-neutral-200"
-                  disabled={isLoading}
-                />
-                <div className="flex flex-col gap-3 mt-4">
+
+              {/* Size Slider */}
+              <div className="flex flex-col gap-4 mt-6">
+                <div className="space-y-3">
+                  <Label htmlFor="size" className="font-medium">
+                    Include Files Under{" "}
+                    <span className="text-violet-600 font-semibold">
+                      {(size >= 1000000 ? size / 1000000 : size / 1000).toFixed(1)} {size >= 1000000 ? "MB" : "KB"}
+                    </span>
+                  </Label>
+                  <Slider
+                    min={0}
+                    max={SIZE_OPTIONS.length - 1}
+                    step={1}
+                    value={[sizeIndex]}
+                    onValueChange={handleSliderChange}
+                    className="w-full sm:w-3/4 lg:w-1/2 bg-neutral-200"
+                    disabled={isLoading}
+                  />
+                </div>
+
+                {/* Example Repositories */}
+                <div className="flex flex-col gap-3 mt-6">
                   <h4 className="font-medium text-sm">Try these example repositories:</h4>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {EXAMPLES.map((item, idx) => (
                       <Button
                         variant={"outline"}
                         key={idx}
                         onClick={() => setUrl(item.href)}
-                        className="bg-violet-200 border-violet-500 hover:text-violet-500 text-xs lg:text-sm"
+                        className="bg-violet-50 border-violet-200 hover:border-violet-500 hover:text-violet-500 text-violet-600 text-xs lg:text-sm transition-colors"
                         disabled={isLoading}
                       >
                         {item.name}
@@ -152,8 +173,10 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* Results Section */}
         {data && (
-          <div className="min-h-[50vh]">
+          <div className="min-h-[50vh] mt-10">
             <Result data={data} />
           </div>
         )}

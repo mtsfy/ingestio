@@ -14,7 +14,7 @@ const Result: React.FC<ResultProps> = ({ data }) => {
         <div className="w-full xl:w-5/12 flex flex-col gap-4">
           {/* Summary */}
           <h1 className="font-bold text-lg">Summary:</h1>
-          <div className="bg-white h-[125px] p-4 border rounded text-neutral-500 text-sm flex flex-col gap-2">
+          <div className="bg-white shadow-sm h-[125px] p-5 border rounded-lg text-neutral-700 text-sm flex flex-col gap-2">
             <h4 className="font-semibold">
               Repository:{" "}
               <span className="font-normal">
@@ -37,7 +37,7 @@ const Result: React.FC<ResultProps> = ({ data }) => {
             </div>
           </div>
           <textarea
-            className="text-xs font-mono w-full min-h-[350px] p-4 border rounded-lg resize-none text-neutral-500"
+            className="text-xs font-mono w-full min-h-[350px] p-4 border rounded-lg resize-none text-neutral-700 shadow-sm bg-white"
             value={data.directory}
             readOnly
           />
@@ -52,7 +52,7 @@ const Result: React.FC<ResultProps> = ({ data }) => {
             </div>
           </div>
           <textarea
-            className="text-xs font-mono w-full min-h-[600px] p-4 border rounded resize-none text-neutral-500"
+            className="text-xs font-mono w-full min-h-[600px] p-4 border rounded-lg resize-none text-neutral-700 shadow-sm bg-white"
             value={data.content}
             readOnly
           />

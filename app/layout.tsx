@@ -23,9 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${font.className} antialiased`}>
         <ToasterProvider />
-        <div className="inset-0 -z-10 w-full min-h-screen bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
+        <div className="inset-0 -z-10 w-full min-h-screen bg-white bg-[radial-gradient(#e5e7eb_0.8px,transparent_0.8px)] [background-size:20px_20px]">
           <Navbar />
-          {children}
+          <main className="max-w-7xl mx-auto px-4 sm:px-6">{children}</main>
           <Footer />
         </div>
       </body>
